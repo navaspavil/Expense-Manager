@@ -1,7 +1,7 @@
 class Transaction{
   String title;
   DateTime date;
-  double amount;
+  String amount;
   Transaction({
     required this.amount,
     required this.date,
