@@ -13,7 +13,6 @@ model.Transaction tr = model.Transaction(
   date: DateTime.now(),
     title: 'esrty'
 );
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -36,5 +35,4 @@ model.Transaction tr = model.Transaction(
 
   @override
   void onClose() {}
-  void increment() => count.value++;
 }
