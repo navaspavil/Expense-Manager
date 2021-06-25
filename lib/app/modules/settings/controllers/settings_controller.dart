@@ -6,7 +6,7 @@ class SettingsController extends GetxController {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final count = 0.obs;
+
   @override
   void onInit() {
     super.onInit();

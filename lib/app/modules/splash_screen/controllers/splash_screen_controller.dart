@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 class SplashScreenController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  final count = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -17,5 +17,4 @@ class SplashScreenController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
 }

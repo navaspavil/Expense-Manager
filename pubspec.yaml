@@ -13,6 +13,7 @@ dependencies:
   cloud_firestore:
   form_field_validator: ^1.1.0
   intl: 0.17.0
+  easy_rich_text: ^0.5.4
   flutter: 
     sdk: flutter
 

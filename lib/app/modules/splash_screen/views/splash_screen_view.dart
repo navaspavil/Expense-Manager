@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:expense_manager/app/modules/splash_screen/controllers/splash_screen_controller.dart';
 import 'package:expense_manager/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 
@@ -15,7 +13,7 @@ class SplashScreenView extends GetView<SplashScreenController> {
         Duration(
           seconds: 2,
         ),
-            () async {
+            () {
           if (_.auth.currentUser == null) {
             Get.offAndToNamed(Routes.LOGIN);
           } else {
@@ -29,19 +27,54 @@ class SplashScreenView extends GetView<SplashScreenController> {
             // color: Colors.black,
             child: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text('EX₹ENSE\nMANAGER',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blue[900]
-                  ),),
-                  SizedBox(
-                    height: 100,
+                  Container(
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: 'EX',
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue[900]
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '₹',
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.red[900]
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'ENSE\nMANAGER',
+                            style: TextStyle(
+                              height: 1.5,
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.blue[900]
+                            ),
+                          )
+                        ]
+                      ),
+                    ),
                   ),
-                  Center(
-                      child: CircularProgressIndicator()
+                  Column(
+                    children: [
+                      Center(
+                          child: CircularProgressIndicator(
+                          )
+                      ),
+                      SizedBox(height: 30,),
+                      Text('   Loading...',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.blue[900]
+                        ),)
+                    ],
                   )
                 ],
               ),

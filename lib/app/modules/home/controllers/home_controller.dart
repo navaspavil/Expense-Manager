@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_manager/app/data/models/Transaction.dart' as model;
-import 'package:expense_manager/app/routes/app_pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
+  FocusNode myFocusNode = new FocusNode();
+  FocusNode myFocusNode1 = new FocusNode();
   FirebaseAuth _auth = FirebaseAuth.instance;
 model.Transaction tr = model.Transaction(
   amount: 26.5,
