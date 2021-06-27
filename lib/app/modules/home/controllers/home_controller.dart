@@ -15,6 +15,7 @@ class HomeController extends GetxController {
   final transactionFormKey = GlobalKey<FormState>();
   FirebaseAuth _auth = FirebaseAuth.instance;
 model.Transaction transaction = model.Transaction(
+  expense: false,
   amount: '0.0',
   title: 'default',
     date: DateTime(1900)
@@ -34,6 +35,7 @@ DateTime selectedDate = DateTime.now();
     sum.value = 0;
     count.value += 1;
     transaction = model.Transaction(
+      expense: false,
         amount: '0.0',
         title: 'default',
         date: DateTime(1900)
@@ -57,6 +59,7 @@ DateTime selectedDate = DateTime.now();
         sum.value +=double.parse(element.data()['amount']);
         print(sum.value);
         return model.Transaction(
+          expense: element.data()['expense'],
           title: element.data()['title'],
           amount: element.data()['amount'],
           date: element.data()['date'].toDate(),

@@ -15,7 +15,7 @@ class HomeView extends GetView<HomeController> {
     (_) {
       Timer(
         Duration(
-          milliseconds: 1,
+          seconds: 1,
         ),
             () {
           _.count.value = _.transactionList.length.toDouble();
