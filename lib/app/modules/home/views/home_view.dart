@@ -50,10 +50,10 @@ class HomeView extends GetView<HomeController> {
                           child: _.count.value >= 1
                               ? Container(
                                   child: Text(
-                                    _.sum.value == 0
+                                    _.sumExpense.value == 0
                                         ? 'Loading...'
-                                        : 'Total : \u20B9' +
-                                            _.sum.value.toString(),
+                                        : 'Total Expense : \u20B9' +
+                                            _.sumExpense.value.toString(),
                                     style: TextStyle(
                                         color: Colors.blue[900],
                                         fontSize: 20,
@@ -86,6 +86,7 @@ class HomeView extends GetView<HomeController> {
                               ),
                             );
                           } else {
+                            print('Lenngth : ${_.transactionList.length}');
                             _.transactionList = snapshot.data;
                             _.transactionList
                                 .sort((b, a) => a.date.compareTo(b.date));
@@ -95,12 +96,12 @@ class HomeView extends GetView<HomeController> {
                                       children: [
                                         Container(
                                           padding: EdgeInsets.fromLTRB(
-                                              10, 10, 10, 0),
+                                              10, 10, 10, 10),
                                           margin:
                                               EdgeInsets.fromLTRB(10, 1, 10, 0),
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: Colors.blueGrey.shade50,
+                                              color: Colors.blueGrey.shade100,
                                               width: 1.5,
                                             ),
                                             borderRadius: BorderRadius.all(
@@ -175,6 +176,20 @@ class HomeView extends GetView<HomeController> {
                                                                       30),
                                                             ),
                                                           ),
+                                                          Container(
+                                                            child: Text(
+                                                              'Type',
+                                                              textAlign:
+                                                              TextAlign
+                                                                  .left,
+                                                              style: TextStyle(
+                                                                  fontSize: MediaQuery.of(
+                                                                      context)
+                                                                      .size
+                                                                      .width /
+                                                                      30),
+                                                            ),
+                                                          ),
                                                         ],
                                                       ),
                                                       Column(
@@ -195,6 +210,22 @@ class HomeView extends GetView<HomeController> {
                                                                               context)
                                                                           .size
                                                                           .width /
+                                                                      30),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Text(
+                                                              ' :',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                                  fontSize: MediaQuery.of(
+                                                                      context)
+                                                                      .size
+                                                                      .width /
                                                                       30),
                                                             ),
                                                           ),
@@ -258,6 +289,19 @@ class HomeView extends GetView<HomeController> {
                                                                       30),
                                                             ),
                                                           ),
+                                                          Container(
+                                                            child: Text(
+                                                              snapshot.data[i].expense?'Expense':'Income',
+                                                              style: TextStyle(
+                                                                color: snapshot.data[i].expense?Colors.red[400]
+                                                                  :Colors.green[400],
+                                                                  fontSize: MediaQuery.of(
+                                                                      context)
+                                                                      .size
+                                                                      .width /
+                                                                      30),
+                                                            ),
+                                                          ),
                                                         ],
                                                       )
                                                     ],
@@ -269,7 +313,7 @@ class HomeView extends GetView<HomeController> {
                                                         size: 23,
                                                       ),
                                                       onPressed: () {
-                                                        _.sum.value = 0;
+                                                        _.sumExpense.value = 0;
                                                         _.deleteTransaction(
                                                             snapshot.data[i]
                                                                 .transactionRef);
@@ -297,7 +341,7 @@ class HomeView extends GetView<HomeController> {
                         Form(
                           key: _.transactionFormKey,
                           child: Container(
-                              height: 300,
+                              height: 375,
                               child: Column(
                                 children: [
                                   Container(
@@ -403,13 +447,68 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                       )),
                                   Container(
+                                    padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
+                                    margin: EdgeInsets.fromLTRB(0, 1, 10, 1),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text('Type :'),
+                                            Obx(() =>
+                                                DropdownButtonHideUnderline(
+                                                  child: DropdownButton(
+                                                    items: ['Select', 'Expense', 'Income'].map((String dropDownStringItem){
+                                                      return DropdownMenuItem<String>(
+                                                          value: dropDownStringItem,
+                                                          child: Text(dropDownStringItem,
+                                                            style: TextStyle(
+                                                                color: dropDownStringItem == 'Expense'?
+                                                                Colors.red[800]
+                                                                    :dropDownStringItem == 'Income'?
+                                                                Colors.green[600]:Colors.grey
+                                                            ),
+                                                          )
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (String? newValue){
+                                                      _.currentItem.value = newValue!;
+                                                      if(newValue == 'Expense'){
+                                                        _.transaction.expense = true;
+                                                      }
+                                                      else{
+                                                        _.transaction.expense = false;
+                                                      }
+                                                    },
+                                                    value: _.currentItem.value,
+                                                  ),
+                                                )
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text(' '),
+                                            Obx(() =>
+                                                Container(
+                                                  child: _.currentItem.value == 'Select'?Text('Please select a type',
+                                                    style: TextStyle(color: Colors.red, fontSize: 12),):Text(''),
+                                                )
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
                                     margin: EdgeInsets.fromLTRB(0, 15, 10, 0),
                                     alignment: Alignment.bottomRight,
                                     child: MaterialButton(
                                       onPressed: () {
                                         if (_.transactionFormKey.currentState!
                                                 .validate() &&
-                                            _.showDate.value != '') {
+                                            _.showDate.value != '' && _.currentItem.value != 'Select') {
                                           _.addTransaction();
                                           Get.back();
                                         } else if (_.showDate.value == '') {

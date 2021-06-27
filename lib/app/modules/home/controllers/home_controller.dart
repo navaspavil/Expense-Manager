@@ -10,12 +10,14 @@ class HomeController extends GetxController {
   RxDouble count = 0.5.obs;
   List<model.Transaction> transactionList = [];
   var showDate =''.obs;
-  var sum = 0.0.obs;
+  var currentItem = 'Select'.obs;
+  var sumExpense = 0.0.obs;
+  var sumIncome =0.0.obs;
   var dateError = false.obs;
   final transactionFormKey = GlobalKey<FormState>();
   FirebaseAuth _auth = FirebaseAuth.instance;
 model.Transaction transaction = model.Transaction(
-  expense: false,
+  expense: true,
   amount: '0.0',
   title: 'default',
     date: DateTime(1900)
@@ -28,14 +30,16 @@ DateTime selectedDate = DateTime.now();
   void addTransaction(){
     FirebaseFirestore.instance.collection('User').doc(_auth.currentUser!.uid)
         .collection('Transactions').add({
+      'expense' : transaction.expense,
       'amount' : transaction.amount,
       'title' : transaction.title,
       'date' : transaction.date
     });
-    sum.value = 0;
+    sumExpense.value = 0;
     count.value += 1;
+    currentItem.value = 'Select';
     transaction = model.Transaction(
-      expense: false,
+      expense: true,
         amount: '0.0',
         title: 'default',
         date: DateTime(1900)
@@ -49,15 +53,23 @@ DateTime selectedDate = DateTime.now();
 
 
   Stream<List<model.Transaction>> getTransactions() {
-    sum.value = 0;
+    sumExpense.value = 0;
+    sumIncome.value = 0;
     return FirebaseFirestore.instance
         .collection("User").doc(_auth.currentUser!.uid)
     .collection('Transactions')
         .snapshots()
         .map((event) {
       return event.docs.map((element) {
-        sum.value +=double.parse(element.data()['amount']);
-        print(sum.value);
+        
+        if(element.data()['expense']){
+          sumExpense.value +=double.parse(element.data()['amount']);
+          print('Sum E: ${sumExpense.value}');
+        }
+        else{
+          sumIncome.value +=double.parse(element.data()['amount']);
+          print('Sum I: ${sumIncome.value}');
+        }
         return model.Transaction(
           expense: element.data()['expense'],
           title: element.data()['title'],
