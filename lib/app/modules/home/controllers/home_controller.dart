@@ -44,7 +44,8 @@ DateTime selectedDate = DateTime.now();
       'date' : transaction.date
     });
     sumExpense.value = 0;
-    count.value += 1;
+    sumIncome.value = 0;
+    count.value = 0;
     currentItem.value = 'Select';
     transaction = model.Transaction(
       expense: true,
@@ -56,11 +57,14 @@ DateTime selectedDate = DateTime.now();
 
   void deleteTransaction(DocumentReference documentReference){
     FirebaseFirestore.instance.doc(documentReference.path).delete();
-    count.value -=1;
+    sumExpense.value = 0;
+    sumIncome.value = 0;
+    count.value = 0;
   }
 
 
   Stream<List<model.Transaction>> getTransactions() {
+    count.value = 0;
     sumExpense.value = 0;
     sumIncome.value = 0;
     return FirebaseFirestore.instance
@@ -71,12 +75,16 @@ DateTime selectedDate = DateTime.now();
       return event.docs.map((element) {
         
         if(element.data()['expense']){
+          count.value += 1;
           sumExpense.value +=double.parse(element.data()['amount']);
           print('Sum E: ${sumExpense.value}');
+          print(count.value);
         }
         else{
+          count.value += 1;
           sumIncome.value +=double.parse(element.data()['amount']);
           print('Sum I: ${sumIncome.value}');
+          print(count.value);
         }
         return model.Transaction(
           expense: element.data()['expense'],
@@ -89,6 +97,7 @@ DateTime selectedDate = DateTime.now();
     });
   }
   Stream<List<model.Transaction>> getCustomTransactions(start, end) {
+    count.value = 0;
     sumExpense.value = 0;
     sumIncome.value = 0;
     return FirebaseFirestore.instance
@@ -99,14 +108,15 @@ DateTime selectedDate = DateTime.now();
         .snapshots()
         .map((event) {
       return event.docs.map((element) {
-
         if(element.data()['expense']){
+          count.value += 1;
           sumExpense.value +=double.parse(element.data()['amount']);
-          print('Sum E: ${sumExpense.value}');
+          // print('Sum E: ${sumExpense.value}');
         }
         else{
+          count.value += 1;
           sumIncome.value +=double.parse(element.data()['amount']);
-          print('Sum I: ${sumIncome.value}');
+          // print('Sum I: ${sumIncome.value}');
         }
         return model.Transaction(
           expense: element.data()['expense'],

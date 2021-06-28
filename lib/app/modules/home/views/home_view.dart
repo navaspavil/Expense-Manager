@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:expense_manager/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,14 +11,14 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(builder:
     (_) {
-      Timer(
+      /*Timer(
         Duration(
           seconds: 1,
         ),
             () {
           _.count.value = _.transactionList.length.toDouble();
         },
-      );
+      );*/
               return Scaffold(
                 appBar: AppBar(
                   title: Text('Transactions'),
@@ -671,7 +669,6 @@ class HomeView extends GetView<HomeController> {
                                                         size: 23,
                                                       ),
                                                       onPressed: () {
-                                                        _.sumExpense.value = 0;
                                                         _.deleteTransaction(
                                                             snapshot.data[i]
                                                                 .transactionRef);
