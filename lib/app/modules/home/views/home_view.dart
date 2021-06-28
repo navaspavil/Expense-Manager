@@ -27,6 +27,303 @@ class HomeView extends GetView<HomeController> {
                   backgroundColor: Color(0xff4e0d3a),
                   actions: [
                     InkWell(
+                      onTap: () {
+                        Get.bottomSheet(
+                          Container(
+                              height: 300,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: InkWell(
+                                          onTap: (){
+                                            _.startDate = DateTime.now().subtract(Duration(days: 6, hours: DateTime.now().hour, minutes: DateTime.now().minute,
+                                                seconds: DateTime.now().second+1, microseconds: DateTime.now().microsecond));
+                                            _.endDate = DateTime.now();
+                                            _.isFilter.value = true;
+                                            _.update();
+                                            Get.back();
+                                          },
+                                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                                              color: Colors.blueGrey.shade400,
+                                            ),
+                                              // height: 20,
+                                              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                              child: Text('Last 7 days', style: _.reportText.copyWith(color: Colors.white),)
+                                          ),
+
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: InkWell(
+                                          onTap: (){
+                                            _.startDate = DateTime.now().subtract(Duration(days: DateTime.now().weekday, hours: DateTime.now().hour, minutes: DateTime.now().minute,
+                                                seconds: DateTime.now().second+1, microseconds: DateTime.now().microsecond));
+                                            _.endDate = DateTime.now();
+                                            _.isFilter.value = true;
+                                            _.update();
+                                            Get.back();
+                                            print(_.startDate);
+                                            print(_.endDate);
+                                          },
+                                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                                color: Colors.blueGrey.shade400,
+                                              ),
+                                              // height: 20,
+                                              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                              child: Text('This week', style: _.reportText.copyWith(color: Colors.white),)
+                                          ),
+
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: InkWell(
+                                          onTap: (){
+                                            _.startDate = DateTime.now().subtract(Duration(days: DateTime.now().day-1, hours: DateTime.now().hour, minutes: DateTime.now().minute,
+                                                seconds: DateTime.now().second+1, microseconds: DateTime.now().microsecond));
+                                            _.endDate = DateTime.now();
+                                            _.isFilter.value = true;
+                                            _.update();
+                                            Get.back();
+                                            print(_.startDate);
+                                            print(_.endDate);
+                                          },
+                                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                                color: Colors.blueGrey.shade400,
+                                              ),
+                                              // height: 20,
+                                              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                              child: Text('This Month', style: _.reportText.copyWith(color: Colors.white),)
+                                          ),
+
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: InkWell(
+                                          onTap: (){
+                                            _.startDate = DateTime(DateTime.now().year);
+                                            _.endDate = DateTime.now();
+                                            _.isFilter.value = true;
+                                            _.update();
+                                            Get.back();
+                                            print(_.startDate);
+                                            print(_.endDate);
+                                          },
+                                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                                color: Colors.blueGrey.shade400,
+                                              ),
+                                              // height: 20,
+                                              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                              child: Text('This Year', style: _.reportText.copyWith(color: Colors.white),)
+                                          ),
+
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 10, top: 3, bottom: 2),
+                                      child: Text('Custom', style: _.reportText,)),
+                                  Obx(() => InkWell(
+                                    onTap: () async {
+                                      var date = await showDatePicker(
+                                          context: context,
+                                          initialDate: _.startDate,
+                                          firstDate: DateTime(2010),
+                                          lastDate: DateTime(2100));
+                                      if (date != null) {
+                                        _.startDate = date.subtract(Duration(hours: DateTime.now().hour, minutes: DateTime.now().minute,
+                                            seconds: DateTime.now().second, microseconds: DateTime.now().microsecond));
+                                        _.showStartDate.value =
+                                            DateFormat.yMMMd().format(date);
+                                      }
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      margin:
+                                      EdgeInsets.fromLTRB(5, 5, 20, 5),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  SizedBox(
+                                                    width: 50,
+                                                      child: Text('From')),
+                                                  Container(
+                                                    child: Text(
+                                                        _.showStartDate.value == ''
+                                                            ? 'Choose a date'
+                                                            : ': '+_.showStartDate.value),
+                                                  ),
+                                                ],
+                                              ),
+                                              Container(
+                                                child: Icon(
+                                                  Icons.date_range_outlined,
+                                                  color: Colors.blueGrey,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Container(
+                                            alignment: Alignment.topLeft,
+                                            child: _.dateError.value
+                                                ? Text(
+                                                'Please choose a date',
+                                                style: TextStyle(
+                                                    color:
+                                                    Colors.red[800],
+                                                    fontSize: 12))
+                                                : Container(),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )),
+                                  Obx(() => InkWell(
+                                    onTap: () async {
+                                      var date = await showDatePicker(
+                                          context: context,
+                                          initialDate: _.endDate,
+                                          firstDate: DateTime(2010),
+                                          lastDate: DateTime(2100));
+                                      if (date != null) {
+                                        _.endDate = date;
+                                        _.showEndDate.value =
+                                            DateFormat.yMMMd().format(date);
+                                      }
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      margin:
+                                      EdgeInsets.fromLTRB(5, 5, 20, 5),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  SizedBox(
+                                                    child: Text('To'),
+                                                  width: 50,),
+                                                  Container(
+                                                    child: Text(
+                                                        _.showEndDate.value == ''
+                                                            ? 'Choose an End date'
+                                                            : ': '+_.showEndDate.value),
+                                                  ),
+                                                ],
+                                              ),
+                                              Container(
+                                                child: Icon(
+                                                  Icons.date_range_outlined,
+                                                  color: Colors.blueGrey,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(0, 15, 10, 0),
+                                        alignment: Alignment.bottomRight,
+                                        child: MaterialButton(
+                                          onPressed: () {
+                                            _.startDate =DateTime.now();
+                                            _.endDate = DateTime.now();
+                                            _.isFilter.value = false;
+                                            _.update();
+                                            Get.back();
+                                          },
+                                          child: Text(
+                                            'Clear Filters',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          color: Color(0xff4e0d3a),
+                                          minWidth: 100,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(8.0)),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(0, 15, 10, 0),
+                                        alignment: Alignment.bottomRight,
+                                        child: MaterialButton(
+                                          onPressed: () {
+                                            _.isFilter.value = true;
+                                            _.update();
+                                            Get.back();
+                                          },
+                                          child: Text(
+                                            'Apply',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          color: Color(0xff4e0d3a),
+                                          minWidth: 100,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(8.0)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          backgroundColor: Colors.white,
+                          isDismissible: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(12),
+                                topLeft: Radius.circular(12)),
+                          ),
+                          enableDrag: false,
+                        );
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: Icon(Icons.filter_list_outlined),
+                      ),
+                    ),
+                    InkWell(
                       onTap: () => Get.toNamed(Routes.SETTINGS),
                       child: Container(
                         alignment: Alignment.center,
@@ -50,7 +347,7 @@ class HomeView extends GetView<HomeController> {
                           child: _.count.value >= 1
                               ? Container(
                                   child: Text(
-                                    _.sumExpense.value == 0
+                                    _.sumExpense.value == 0 && _.sumIncome.value == 0
                                         ? 'Loading...'
                                         : 'Total Expense : \u20B9' +
                                             _.sumExpense.value.toString(),
@@ -68,9 +365,70 @@ class HomeView extends GetView<HomeController> {
                                       Text('Please Add your First Transaction'),
                                 ),
                         )),
+                    Obx(() =>
+                        Container(
+                          decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.all(Radius.circular(8))),
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: Theme(
+                            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                            child: ExpansionTile(
+                              initiallyExpanded: _.isExpanded.value,
+                              onExpansionChanged: (bool isExpanded){
+                                _.isExpanded.value = isExpanded;
+                              },
+                              subtitle: Text(
+                                _.isExpanded.value?'Tap here to close':'Tap here to expand',
+                                style: TextStyle(fontSize: 12, color: Colors.grey),
+                              ),
+                              title: Text('Full Report'
+                              ),
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Total Income', style: _.reportText,),
+                                          SizedBox(height: 5,),
+                                          Text('Total Expense', style: _.reportText,),
+                                          SizedBox(height: 5,),
+                                          Text('Balance', style: _.reportText,),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(' :', style: _.reportText,),
+                                          SizedBox(height: 5,),
+                                          Text(' :', style: _.reportText,),
+                                          SizedBox(height: 5,),
+                                          Text(' :', style: _.reportText,),
+                                        ],
+                                      ),
+                                      Expanded(child: Container()),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Text(_.sumIncome.value.toString(), style: _.reportText,),
+                                          SizedBox(height: 5,),
+                                          Text(_.sumExpense.value.toString(), style: _.reportText,),
+                                          SizedBox(height: 5,),
+                                          Text('${_.sumIncome.value - _.sumExpense.value}', style: _.reportText,),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                    ),
                     Expanded(
                       child: StreamBuilder(
-                        stream: _.getTransactions(),
+                        stream: _.isFilter.value?_.getCustomTransactions(_.startDate, _.endDate):_.getTransactions(),
                         builder: (context, AsyncSnapshot<dynamic> snapshot) {
                           if (snapshot.connectionState ==
                                   ConnectionState.waiting ||
@@ -86,7 +444,7 @@ class HomeView extends GetView<HomeController> {
                               ),
                             );
                           } else {
-                            print('Lenngth : ${_.transactionList.length}');
+                            print('Length : ${_.transactionList.length}');
                             _.transactionList = snapshot.data;
                             _.transactionList
                                 .sort((b, a) => a.date.compareTo(b.date));
@@ -398,7 +756,7 @@ class HomeView extends GetView<HomeController> {
                                               context: context,
                                               initialDate: _.selectedDate,
                                               firstDate: DateTime(2010),
-                                              lastDate: DateTime(2100));
+                                              lastDate: DateTime.now());
                                           if (date != null) {
                                             _.selectedDate = date;
                                             _.transaction.date = date;
@@ -522,7 +880,7 @@ class HomeView extends GetView<HomeController> {
                                           fontSize: 15,
                                         ),
                                       ),
-                                      color: Colors.purple,
+                                      color: Color(0xff4e0d3a),
                                       minWidth: 100,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:

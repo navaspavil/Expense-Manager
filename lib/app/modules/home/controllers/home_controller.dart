@@ -7,10 +7,18 @@ import 'package:get/get.dart';
 class HomeController extends GetxController {
   FocusNode myFocusNode = new FocusNode();
   FocusNode myFocusNode1 = new FocusNode();
+  DateTime startDate = DateTime.now(), endDate = DateTime.now();
+  var showStartDate = ''.obs;
+  var showEndDate = ''.obs;
+  var isFilter = false.obs;
+  TextStyle reportText = TextStyle(fontSize: 16,
+      fontWeight: FontWeight.w500
+  );
   RxDouble count = 0.5.obs;
   List<model.Transaction> transactionList = [];
   var showDate =''.obs;
   var currentItem = 'Select'.obs;
+  var isExpanded = false.obs;
   var sumExpense = 0.0.obs;
   var sumIncome =0.0.obs;
   var dateError = false.obs;
@@ -80,6 +88,36 @@ DateTime selectedDate = DateTime.now();
       }).toList();
     });
   }
+  Stream<List<model.Transaction>> getCustomTransactions(start, end) {
+    sumExpense.value = 0;
+    sumIncome.value = 0;
+    return FirebaseFirestore.instance
+        .collection("User").doc(_auth.currentUser!.uid)
+        .collection('Transactions')
+        .where('date', isGreaterThanOrEqualTo: start)
+        .where('date', isLessThanOrEqualTo: end)
+        .snapshots()
+        .map((event) {
+      return event.docs.map((element) {
+
+        if(element.data()['expense']){
+          sumExpense.value +=double.parse(element.data()['amount']);
+          print('Sum E: ${sumExpense.value}');
+        }
+        else{
+          sumIncome.value +=double.parse(element.data()['amount']);
+          print('Sum I: ${sumIncome.value}');
+        }
+        return model.Transaction(
+          expense: element.data()['expense'],
+          title: element.data()['title'],
+          amount: element.data()['amount'],
+          date: element.data()['date'].toDate(),
+          transactionRef: element.reference,
+        );
+      }).toList();
+    });
+  }
 
   @override
   void onReady() {
@@ -88,4 +126,6 @@ DateTime selectedDate = DateTime.now();
 
   @override
   void onClose() {}
+
+  //SETTINGS...................................................................
 }
